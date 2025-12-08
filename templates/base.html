@@ -8,33 +8,35 @@
     <title>Simple Flask app</title>
 </head>
 <body>
-    {% block content %}
     <head class="headtag">
-        <h1> Welcome to my Simple Flask App</h1>
+        <h1> Welcome to my Login App</h1>
     </head>
-    {%with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            <div class="container mt-3">
-                {% for category, message in messages%}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ messages }}
-                    <button type="button" class="btn-class" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category or 'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+            {% endif %}          
+        {% endwith %}
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <nav class="navtags">
-        <a class="nav-home" href="/home"> Home |</a>
+        <a class="nav-home" href="/"> Home |</a>
         <a class="login" href="/login"> login | </a>
         <a class="dashboard" href="/dashboard"> Dashboard</a>
     </nav>
-    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
-    {% endblock %}
+    
     
 </body>
 </html>
