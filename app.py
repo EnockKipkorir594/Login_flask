@@ -21,6 +21,7 @@ class User(db.Model):
     username = db.Column(db.String(25), unique=True, nullable=False)
     email = db.Column(db.String(60), unique=True, nullable=False)
     password = db.Column(db.String(),nullable=False)
+    
 
     def __repr__(self):
         return f'{self.username}'
@@ -31,6 +32,7 @@ class User(db.Model):
 @app.route('/', methods=['GET','POST'])
 def hello():
     if request.method == 'POST':
+        #form validation checking if the usr has filled in all the details
         username = request.form.get('username', '').strip()
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password','')
@@ -38,12 +40,12 @@ def hello():
         if not username:
             errors.append("username required")
         if not email:
-            errors.append(" email requires")
+            errors.append("email required")
         if not password:
-            errors.append(" password required")
+            errors.append("password required")
 
         if errors:
-            return render_template('index.html', username=username, errors=errors, email=email, password=password)
+            return render_template('registration.html', username=username, email=email, password=password, errors=errors)
         hashed = generate_password_hash(password)
         user = User(username=username, email=email, password=hashed)
         
@@ -53,7 +55,7 @@ def hello():
         except IntegrityError:
             db.session.rollback()
             flash('User with that username or email already exists', category='danger')
-            return render_template('index.html')
+            return render_template('registration.html')
         flash('User regisered successfully ', category="success")
 
         #set session 
@@ -61,9 +63,7 @@ def hello():
         session['email'] = user.email
 
         return redirect(url_for('dashboard'))
-    return render_template('index.html')
-#Implementing a dynamic route using the variable name (username)
-#converter is a string
+    return render_template('registration.html')
  
 #login route 
 @app.route('/login', methods=['POST', 'GET'])
@@ -76,7 +76,7 @@ def login_page():
         user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password, password):
             errors.append('Invalid username or password')
-            return render_template('index.html', errors=errors, email=email)
+            return render_template('registration.html', errors=errors, email=email)
 
         session['email'] = user.email
         flash('User logged in successfully', 'success')
@@ -91,5 +91,6 @@ def dashboard():
     return render_template('dashboard.html', username=session.get('username'))
 
 if __name__ == '__main__':
+
     app.run(host="0.0.0.0", port=5000, debug=True)
 
