@@ -1,18 +1,18 @@
-#Flask Login Application
+# Flask Login Application
 A simple web application with user authentication built python and flask, containerized with Docker
 
-#Tech Stack
--**Python 3.12+**
--**Flask** - Web framework
--**Flask SQLAlchemy** - Database ORM 
--**Werkzeug Security** - Password hashing and verification 
--**Flask Sessions** - User session management 
--**SQLite** - Database
--**Docker** - Containerization 
+# Tech Stack
+- **Python 3.12+**
+- **Flask** - Web framework
+- **Flask SQLAlchemy** - Database ORM 
+- **Werkzeug Security** - Password hashing and verification 
+- **Flask Sessions** - User session management 
+- **SQLite** - Database
+- **Docker** - Containerization 
 
 
-##Project Structure 
-'''
+## Project Structure 
+```
 ├── app.py                #App configs, database models, entry point 
 ├── bot.py
 ├── docker-compose.yml    #Docker compose config 
@@ -35,33 +35,35 @@ A simple web application with user authentication built python and flask, contai
     ├── dashboard.html
     ├── login.html
     └── registration.html
-'''
+```
 
 
-##Features
+## Features
 
--User registration with securely hashed passwords using werkzeug 
--Secure login and logout 
--Session-based authentication - User identity stored in flask sessions
--Protected routes - Redirect to login if no active session 
+- User registration with securely hashed passwords using werkzeug 
+- Secure login and logout 
+- Session-based authentication - User identity stored in flask sessions
+- Protected routes - Redirect to login if no active session 
 
-##How Authentication works 
+## How Authentication works 
 
 This project handles authentication without any third party auth library.
 Werkzeug and Flask sessions do all the heavy lifting:
 
 
 **Registration**
-'''python 
+```python 
 from werkzeug.security import generate_passord_hash
 hashed_password = generate_password_hash(password)
 
+```
 **Login**
-'''python 
+```python 
 from werkzeug.security import check_password_hash 
 check_password_hash(user.password, password)
-
+```
 **Session**
+```python
 from flask import session 
 
 session['username'] = user.username 
@@ -69,7 +71,7 @@ session.pop('username', None)
 
 if username not in session:
   return redirect('/login')
-
+```
 ## Running Locally (Without Docker)
 
 **1. Clone the repository**
